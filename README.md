@@ -1,13 +1,14 @@
 # Gerenciador de Usuários Linux
 
-Este é um script simples em Bash para **criar e deletar usuários** em sistemas Linux. Ele é feito para aprendizado de administração de sistemas e é totalmente **portável**.
+Este é um script simples em Bash **para criar, deletar e listar usuários** em sistemas Linux. Ele é feito para aprendizado de administração de sistemas e é totalmente **portável**.
+
+O script agora roda em um loop contínuo, permitindo que você execute múltiplas ações sem precisar reiniciá-lo.
 
 ---
 
 ## Estrutura do projeto
 
 - `gerenciar_usuarios.sh` → script principal que cria/deleta usuários e mostra mensagens no terminal.
-- `executor.sh` → lançador que abre um terminal e executa o script interno.
 - `README.md` → este arquivo, explicando o uso do projeto.
 
 ---
@@ -15,7 +16,6 @@ Este é um script simples em Bash para **criar e deletar usuários** em sistemas
 ## Pré-requisitos
 
 - Linux (qualquer distribuição moderna)
-- Terminal disponível (`gnome-terminal`)
 - Permissão de root para criar ou deletar usuários (`sudo`)
 
 ---
@@ -25,30 +25,58 @@ Este é um script simples em Bash para **criar e deletar usuários** em sistemas
 ### 1. Torne os scripts executáveis (só precisa fazer uma vez):
 
 ```bash
-chmod +x executor.sh
 chmod +x gerenciar_usuarios.sh
 ```
 
 ### 2. Rodando o script
 
-Modo recomendado (portável e seguro): pelo terminal
+Você deve executar o script com privilégios de root, pois ele precisa de permissão para criar e deletar usuários no sistema.
+```bash
+sudo ./gerenciar_usuarios.sh
+```
 
-`./gerenciar_usuarios.sh`
+Isso vai abrir o menu interativo diretamente no seu terminal.
 
-Isso vai abrir um terminal interativo, mostrar o menu de opções, e manter a janela aberta até você pressionar Enter.
+## Menu do script
 
-Evite clicar direto no script interno (gerenciar_usuarios.sh) sem usar o lançador (executor.sh).
+O script mostrará o seguinte menu:
 
-Se você clicar direto, o terminal pode fechar antes de mostrar as mensagens.
+Digite 1 → Criar Usuário
 
-O lançador (executor.sh) garante que o script principal rode em um terminal aberto e seguro. Atualmente, ele depende do GNOME Terminal, então só funcionará em sistemas que o tenham instalado. O projeto ainda está em desenvolvimento.
+Pede um nome de usuário, cria sua pasta /home e define uma senha.
 
-Menu do script
+Digite 2 → Deletar Usuário
 
-Digite 1 → Criar usuário
+Pede um nome de usuário e remove o usuário e sua pasta /home.
 
-Digite 2 → Deletar usuário
+Digite 3 → Listar Usuários
 
-Digite 3 → Sair
+Lista todos os usuários "humanos" (não-sistema) cadastrados.
 
-Após cada ação, pressione Enter para encerrar o terminal.
+Digite 4 → Sair
+
+Encerra o script.
+
+## Próximas Etapas do Projeto(Roadmap)
+
+Este projeto é um aprendizado contínuo. As melhorias planejadas incluem:
+
+- [ ] Adicionar Opção "Mudar Senha":
+
+    - Criar uma nova função que utilize o comando passwd para forçar a troca de senha de um usuário existente.
+
+- [ ] Melhoria Visual do Menu:
+
+    - Estudar o uso de comandos como tput para adicionar cores ao menu (ex: opções em verde, sair em vermelho) e clear para limpar a tela a cada loop, tornando a interface mais limpa.
+
+- [ ] Verificação de Usuário Existente:
+
+    - Antes de criar um usuário, verificar (talvez usando grep no /etc/passwd) se o nome de usuário já existe, para evitar erros.
+
+- [ ] Confirmação de Exclusão:
+
+    - Adicionar um passo de confirmação ("Você tem certeza? [s/N]") antes de deletar um usuário, para prevenir acidentes.
+
+- [ ] Adicionar Usuário a Grupos:
+
+    - Implementar uma opção para adicionar um usuário existente a grupos específicos (como sudo, docker, www-data, etc.).
